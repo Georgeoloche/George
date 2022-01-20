@@ -111,17 +111,23 @@ class AccountSettingsActivity : AppCompatActivity()
             bio_profile_frag.text.toString() == "" -> { Toast.makeText(this, "please write your bio first", Toast.LENGTH_SHORT).show() }
             else -> {
 
-                val usersRef = FirebaseDatabase.getInstance().getReference().child("Users")
+                val usersRef = FirebaseDatabase.getInstance().reference.child("Users")
 
                 val userMap = HashMap<String, Any>()
-                userMap["fullname"] = full_name_profile_frag.getText().toString().lowercase(Locale.getDefault())
-                userMap["username"] =username_profile_frag.getText().toString().lowercase(Locale.getDefault())
+                userMap["fullname"] =
+                    full_name_profile_frag.text.toString().lowercase(Locale.getDefault())
+                userMap["username"] =
+                    username_profile_frag.text.toString().lowercase(Locale.getDefault())
                 userMap["bio"] = bio_profile_frag.text.toString().lowercase(Locale.getDefault())
 
                 usersRef.child(firebaseUser.uid).updateChildren(userMap)
 
 
-                Toast.makeText(this, "Account information has been updated  successfully.", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this,
+                    "Account information has been updated  successfully.",
+                    Toast.LENGTH_LONG
+                ).show()
 
                 val intent = Intent(this@AccountSettingsActivity, MainActivity::class.java)
 
@@ -135,7 +141,8 @@ class AccountSettingsActivity : AppCompatActivity()
     }
     private fun userInfo()
     {
-        val usersRef = FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseUser.uid)
+        val usersRef =
+            FirebaseDatabase.getInstance().reference.child("Users").child(firebaseUser.uid)
 
         usersRef.addValueEventListener(object : ValueEventListener
         {
@@ -144,10 +151,11 @@ class AccountSettingsActivity : AppCompatActivity()
                 if (p0.exists()) {
                     val user = p0.getValue<User>(User::class.java)
 
-                    Picasso.get().load(user!!.getImage()).placeholder(R.drawable.profile).into(profile_image_view_profile_frag)
-                    username_profile_frag.setText(user!!.getusername())
-                    full_name_profile_frag.setText(user!!.getfullname())
-                    bio_profile_frag.setText(user!!.getBio())
+                    Picasso.get().load(user!!.getImage()).placeholder(R.drawable.profile)
+                        .into(profile_image_view_profile_frag)
+                    username_profile_frag.setText(user.getusername())
+                    full_name_profile_frag.setText(user.getfullname())
+                    bio_profile_frag.setText(user.getBio())
                 }
             }
 
@@ -176,7 +184,7 @@ class AccountSettingsActivity : AppCompatActivity()
                progressDialog.setMessage("please wait we are updating your profile...")
                progressDialog.show()
 
-            val fileRef = storageProfilePicRef!!.child(firebaseUser!!.uid + ".jpg")
+               val fileRef = storageProfilePicRef!!.child(firebaseUser.uid + ".jpg")
 
                var uploadTask: StorageTask<*>
                uploadTask = fileRef.putFile(imageUri!!)
@@ -191,24 +199,30 @@ class AccountSettingsActivity : AppCompatActivity()
                    }
                    return@Continuation fileRef.downloadUrl
                }).addOnCompleteListener (OnCompleteListener<Uri>{task ->
-                   if (task.isSuccessful)
-                   {
+                   if (task.isSuccessful) {
                        val downloadUri = task.result
                        myUri = downloadUri.toString()
 
                        val ref = FirebaseDatabase.getInstance().reference.child("Users")
 
                        val userMap = HashMap<String, Any>()
-                       userMap["fullname"] = full_name_profile_frag.getText().toString().lowercase(Locale.getDefault())
-                       userMap["username"] =username_profile_frag.getText().toString().lowercase(Locale.getDefault())
-                       userMap["bio"] = bio_profile_frag.text.toString().lowercase(Locale.getDefault())
+                       userMap["fullname"] =
+                           full_name_profile_frag.text.toString().lowercase(Locale.getDefault())
+                       userMap["username"] =
+                           username_profile_frag.text.toString().lowercase(Locale.getDefault())
+                       userMap["bio"] =
+                           bio_profile_frag.text.toString().lowercase(Locale.getDefault())
                        userMap["image"] = myUri
 
                        ref.child(firebaseUser.uid).updateChildren(userMap)
 
 
 
-                       Toast.makeText(this, "Account information has been updated  successfully.", Toast.LENGTH_LONG).show()
+                       Toast.makeText(
+                           this,
+                           "Account information has been updated  successfully.",
+                           Toast.LENGTH_LONG
+                       ).show()
 
                        val intent = Intent(this@AccountSettingsActivity, MainActivity::class.java)
 
