@@ -41,8 +41,7 @@ class post {
        this.postid = postid
    }
 
-    fun setpostimage(image: String)
-    {
+    fun setpostimage(postimage: String) {
         this.postimage = postimage
     }
 

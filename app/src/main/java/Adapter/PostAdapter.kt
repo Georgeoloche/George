@@ -68,8 +68,10 @@ class PostAdapter
 
         val post = mPost[position]
 
-//      Picasso.get().load(post.getpostimage()).into(holder.postImage)
-//
+        Picasso.get().load(post.getpostimage()).into(holder.postImage)
+
+
+
         publisherInfo(holder.profileImage, holder.userName, holder.publisher, post.getpublisher())
     }
 
