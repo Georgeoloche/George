@@ -56,17 +56,15 @@ class HomeFragment : Fragment() {
                 .child("Following")
 
         followingRef.addValueEventListener(object: ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
+            override fun onDataChange(p0: DataSnapshot) {
 
-                if (snapshot.exists())
-                {
+                if (p0.exists()) {
                     (followingList as ArrayList<*>).clear()
 
-                    for (snapshot in snapshot.children)
-                    {
-                        snapshot.key?.let {( followingList as ArrayList<String>).add(it)}
+                    for (snapshot in p0.children) {
+                        snapshot.key?.let { (followingList as ArrayList<String>).add(it) }
                     }
-                     retrievePost()
+                    retrievePost()
                 }
             }
 
@@ -75,33 +73,27 @@ class HomeFragment : Fragment() {
             }
         } )
     }
-
-
-
-
 
     private fun retrievePost() {
 
         val postsRef = FirebaseDatabase.getInstance().reference.child("Posts")
 
-        postsRef.addValueEventListener(object: ValueEventListener
-        {
-            override fun onDataChange(snapshot: DataSnapshot) {
+        postsRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                postList?.clear()
 
-         postList?.clear()
-
-                for (snapshot in snapshot.children)
-
-                {
+                for (snapshot in p0.children) {
                     val post = snapshot.getValue(post::class.java)
 
-                    for (id in followingList!!)
-                    {
-                        if (post!!.getpublisher() == id.toString() )
-                        {
-                         postList?.add(post)
+                    for (id in followingList as ArrayList<String>) {
+                        if (post!!.getpublisher().equals(id)) {
+                            postList!!.add(post)
                         }
+
+                        postAdapter!!.notifyDataSetChanged()
                     }
+
+
                 }
 
             }
@@ -109,9 +101,43 @@ class HomeFragment : Fragment() {
             override fun onCancelled(error: DatabaseError) {
 
             }
-        } )
+
+        })
 
     }
+
+
+//    private fun retrievePost() {
+//
+//        val postsRef = FirebaseDatabase.getInstance().reference.child("Posts")
+//
+//        postsRef.addValueEventListener(object: ValueEventListener
+//        {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//
+//         postList?.clear()
+//
+//                for (snapshot in snapshot.children)
+//
+//                {
+//                    val post = snapshot.getValue(post::class.java)
+//
+//                    for (id in followingList!!)
+//                    {
+//                        if (post!!.getpublisher() == id.toString() )
+//                        {
+//                         postList?.add(post)
+//                        }
+//                    }
+//                }
+//
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//
+//            }
+//        } )
+
 
 }
 

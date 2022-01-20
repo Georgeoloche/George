@@ -42,16 +42,16 @@ class PostAdapter
         var comments: TextView
 
         init {
-            profileImage =itemView.findViewById(R.id.user_profile_image_post)
-            postImage =itemView.findViewById(R.id.post_image_home)
-            likeButton =itemView.findViewById(R.id.user_profile_image_post)
-            commentButton =itemView.findViewById(R.id.user_profile_image_post)
-            saveButton =itemView.findViewById(R.id.user_profile_image_post)
-            userName =itemView.findViewById(R.id.user_profile_image_post)
-            likes =itemView.findViewById(R.id.user_profile_image_post)
-            publisher =itemView.findViewById(R.id.user_profile_image_post)
-            description=itemView.findViewById(R.id.user_profile_image_post)
-            comments =itemView.findViewById(R.id.user_profile_image_post)
+            profileImage = itemView.findViewById(R.id.user_profile_image_post)
+            postImage = itemView.findViewById(R.id.post_image_home)
+            likeButton = itemView.findViewById(R.id.post_image_like_btn)
+            commentButton = itemView.findViewById(R.id.post_image_comment_btn)
+            saveButton = itemView.findViewById(R.id.post_save_comment_btn)
+            userName = itemView.findViewById(R.id.user_name_post)
+            likes = itemView.findViewById(R.id.likes)
+            publisher = itemView.findViewById(R.id.publisher)
+            description = itemView.findViewById(R.id.description)
+            comments = itemView.findViewById(R.id.comments)
         }
 
     }
@@ -68,26 +68,26 @@ class PostAdapter
 
         val post = mPost[position]
 
-        Picasso.get().load(post.getpostimage()).into(holder.postImage)
-
-        publisherInfo(holder.profileImage , holder.userName , holder.publisher, post.getpublisher())
+//      Picasso.get().load(post.getpostimage()).into(holder.postImage)
+//
+        publisherInfo(holder.profileImage, holder.userName, holder.publisher, post.getpublisher())
     }
 
     private fun publisherInfo(profileImage: CircleImageView, userName: TextView, publisher: TextView, publisherID: String)
     {
-      val usersRef = FirebaseDatabase.getInstance().reference.child("users").child(publisherID)
+        val usersRef = FirebaseDatabase.getInstance().reference.child("Users").child(publisherID)
         usersRef.addValueEventListener(object: ValueEventListener
         {
 
             override fun onDataChange(snapshot: DataSnapshot)
             {
-              if (snapshot.exists())
-              {
+              if (snapshot.exists()) {
                   val user = snapshot.getValue<User>(User::class.java)
 
-                  Picasso.get().load(user!!.getImage()).placeholder(R.drawable.profile).into(profileImage)
-                  userName.text = user!!.getusername()
-                 publisher.text = user!!.getfullname()
+                  Picasso.get().load(user!!.getImage()).placeholder(R.drawable.profile)
+                      .into(profileImage)
+                  userName.text = user.getusername()
+                  publisher.text = user.getfullname()
 
               }
             }
